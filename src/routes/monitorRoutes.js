@@ -1,14 +1,13 @@
 // @compliance BIG_BROTHER_V2
 const express = require('express');
 const BigBrotherMonitor = require('../services/bigBrotherMonitor');
-const { validateHealthCheck } = require('../utils/validators');
 const logger = require('../utils/logger');
 
 const router = express.Router();
 const monitor = new BigBrotherMonitor();
 
-// Start monitoring when module loads
-monitor.startMonitoring();
+// Don't auto-start monitoring to prevent deployment issues
+// Monitor will be started via API endpoint when needed
 
 // GET /api/monitor/status - Get monitoring status and data
 router.get('/status', (req, res) => {
