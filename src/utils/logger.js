@@ -15,8 +15,15 @@ class VoiceLogger {
   }
 
   ensureLogDirectory() {
-    if (!fs.existsSync(this.logDir)) {
-      fs.mkdirSync(this.logDir, { recursive: true });
+    try {
+      if (process.env.NODE_ENV === 'production' && !process.env.ENABLE_FILE_LOGGING) {
+        return; // Skip directory creation in production unless explicitly enabled
+      }
+      if (!fs.existsSync(this.logDir)) {
+        fs.mkdirSync(this.logDir, { recursive: true });
+      }
+    } catch (error) {
+      console.warn('Could not create log directory:', error.message);
     }
   }
 
@@ -36,8 +43,16 @@ class VoiceLogger {
   }
 
   writeToFile(logData) {
-    const logFile = path.join(this.logDir, `voice-${new Date().toISOString().split('T')[0]}.log`);
-    fs.appendFileSync(logFile, logData + '\n');
+    try {
+      if (process.env.NODE_ENV === 'production' && !process.env.ENABLE_FILE_LOGGING) {
+        return; // Skip file logging in production unless explicitly enabled
+      }
+      const logFile = path.join(this.logDir, `voice-${new Date().toISOString().split('T')[0]}.log`);
+      fs.appendFileSync(logFile, logData + '\n');
+    } catch (error) {
+      // Silently fail file logging to prevent app crashes
+      console.warn('File logging failed:', error.message);
+    }
   }
 
   info(message, meta = {}) {
