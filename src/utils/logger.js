@@ -105,13 +105,37 @@ class VoiceLogger {
     });
   }
 
-  performance(operation, duration, meta = {}) {
-    this.info(`[PERF] ${operation} completed in ${duration}ms`, {
-      category: 'performance',
-      operation,
-      duration,
-      ...meta
-    });
+  performance(operation, component, meta = {}) {
+    const startTime = Date.now();
+    const metadata = { ...meta };
+    
+    return {
+      addMetadata: (key, value) => {
+        metadata[key] = value;
+      },
+      end: (message = '') => {
+        const duration = Date.now() - startTime;
+        this.info(`[PERF] ${operation} completed in ${duration}ms${message ? ` - ${message}` : ''}`, {
+          category: 'performance',
+          operation,
+          component,
+          duration,
+          ...metadata
+        });
+      },
+      endWithError: (error, message = '') => {
+        const duration = Date.now() - startTime;
+        this.error(`[PERF] ${operation} failed after ${duration}ms${message ? ` - ${message}` : ''}`, {
+          category: 'performance',
+          operation,
+          component,
+          duration,
+          error: error.message,
+          stack: error.stack,
+          ...metadata
+        });
+      }
+    };
   }
 
   apiRequest(method, endpoint, duration, status, meta = {}) {
