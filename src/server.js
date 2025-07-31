@@ -11,9 +11,10 @@ const path = require('path');
 
 const logger = require('./utils/logger');
 const { performanceMonitoring, errorHandler, rateLimiter } = require('./utils/middleware');
-const voiceRoutes = require('./routes/voiceRoutes');
-const agentRoutes = require('./routes/agentRoutes');
 const healthRoutes = require('./routes/healthRoutes');
+// Temporarily disable complex routes to debug deployment
+// const voiceRoutes = require('./routes/voiceRoutes');
+// const agentRoutes = require('./routes/agentRoutes');
 
 class BigBrotherVoiceServer {
   constructor() {
@@ -74,9 +75,10 @@ class BigBrotherVoiceServer {
       });
     });
 
-    this.app.use('/api/v2/voice', voiceRoutes);
-    this.app.use('/api/v2/agents', agentRoutes);
-    this.app.use('/api/v2/monitor', require('./routes/monitorRoutes'));
+    // Temporarily disable complex routes to debug deployment
+    // this.app.use('/api/v2/voice', voiceRoutes);
+    // this.app.use('/api/v2/agents', agentRoutes);
+    // this.app.use('/api/v2/monitor', require('./routes/monitorRoutes'));
     this.app.use('/health', healthRoutes);
   }
 
