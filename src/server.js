@@ -11,7 +11,7 @@ const path = require('path');
 
 const logger = require('./utils/logger');
 const { performanceMonitoring, errorHandler, rateLimiter } = require('./utils/middleware');
-const healthRoutes = require('./routes/healthRoutes');
+const healthRoutes = require('./routes/healthRoutes-simple');
 // Temporarily disable complex routes to debug deployment
 // const voiceRoutes = require('./routes/voiceRoutes');
 // const agentRoutes = require('./routes/agentRoutes');
