@@ -118,12 +118,18 @@ class BigBrotherVoiceServer {
 
       process.on('uncaughtException', (error) => {
         logger.error('Uncaught exception', { error: error.message, stack: error.stack });
-        process.exit(1);
+        // Don't exit immediately in production to allow for graceful recovery
+        if (process.env.NODE_ENV !== 'production') {
+          process.exit(1);
+        }
       });
 
       process.on('unhandledRejection', (reason, promise) => {
         logger.error('Unhandled rejection', { reason, promise });
-        process.exit(1);
+        // Don't exit immediately in production to allow for graceful recovery
+        if (process.env.NODE_ENV !== 'production') {
+          process.exit(1);
+        }
       });
 
     } catch (error) {
