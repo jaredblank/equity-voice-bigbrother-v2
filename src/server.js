@@ -76,6 +76,7 @@ class BigBrotherVoiceServer {
 
     this.app.use('/api/v2/voice', voiceRoutes);
     this.app.use('/api/v2/agents', agentRoutes);
+    this.app.use('/api/v2/monitor', require('./routes/monitorRoutes'));
     this.app.use('/health', healthRoutes);
   }
 
